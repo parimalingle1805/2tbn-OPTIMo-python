@@ -186,7 +186,7 @@ class RobotModel:
         if np.any(valid_d_idx):
             plt.stem(time_indices[valid_d_idx],
                      max_abs_diff * np.array([d['d'] for d in data_all])[valid_d_idx],
-                     'ro', linewidth=1.5, label='Observed Dir')
+                     'ro', linefmt='r-', label='Observed Dir')
 
         plt.xlabel('time (sec)     Diff in: MAP (black -) | Exp(smooth) (blue -) | Exp(filter) (green -) | Observed Dir (red o)')
         plt.ylabel('Change in latent state (robot pose)')

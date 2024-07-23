@@ -48,20 +48,28 @@ def summarizePMF(pmfs, states, bin_widths, alpha=0.05):
         idx_upper_ci_low = np.argmax(cmfs[i, :] >= conf_int_low)
         prob_upper_ci_low = cmfs[i, idx_upper_ci_low]
         prob_lower_ci_low = cmfs[i, idx_upper_ci_low - 1] if idx_upper_ci_low > 0 else 0
-        stats[i, 2] = (
-            states[idx_upper_ci_low] - bin_widths[idx_upper_ci_low] / 2 +
-            bin_widths[idx_upper_ci_low] *
-            (conf_int_low - prob_lower_ci_low) /
-            (prob_upper_ci_low - prob_lower_ci_low))
+
+        if abs(prob_upper_ci_low - prob_lower_ci_low) > 1e-12:  # Adjust threshold if needed
+            stats[i, 2] = (
+                states[idx_upper_ci_low] - bin_widths[idx_upper_ci_low] / 2 +
+                bin_widths[idx_upper_ci_low] *
+                (conf_int_low - prob_lower_ci_low) /
+                (prob_upper_ci_low - prob_lower_ci_low))
+        else:
+            stats[i, 2] = states[idx_upper_ci_low]
 
         # Upper confidence interval
         idx_upper_ci_high = np.argmax(cmfs[i, :] >= conf_int_high)
         prob_upper_ci_high = cmfs[i, idx_upper_ci_high]
         prob_lower_ci_high = cmfs[i, idx_upper_ci_high - 1] if idx_upper_ci_high > 0 else 0
-        stats[i, 3] = (
-            states[idx_upper_ci_high] - bin_widths[idx_upper_ci_high] / 2 +
-            bin_widths[idx_upper_ci_high] *
-            (conf_int_high - prob_lower_ci_high) /
-            (prob_upper_ci_high - prob_lower_ci_high))
+        
+        if abs(prob_upper_ci_high - prob_lower_ci_high) > 1e-12:
+            stats[i, 3] = (
+                states[idx_upper_ci_high] - bin_widths[idx_upper_ci_high] / 2 +
+                bin_widths[idx_upper_ci_high] *
+                (conf_int_high - prob_lower_ci_high) /
+                (prob_upper_ci_high - prob_lower_ci_high))
+        else:
+            stats[i, 3] = states[idx_upper_ci_high]
 
     return stats
