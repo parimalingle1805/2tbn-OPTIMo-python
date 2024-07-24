@@ -8,10 +8,10 @@ from histoEngineEM import HistoEngineEM
 from genRobotPathData import genRobotPathData
 from errorbar_tick import errorbar_tick
 
-# %% Set up environment
+# Set up environment
 np.random.seed(1729)
 
-# %% Generate simulated observed data
+# Generate simulated observed data
 
 num_time_steps = 201
 init_pos = 0.3
@@ -37,7 +37,7 @@ dataset = genRobotPathData(num_time_steps, init_pos,
                            sweep_tight_lower_cap)
 ds = dataset['data_all']
 
-# %% Initialize engine and run filtering through first N time steps
+# Initialize engine and run filtering through first N time steps
 
 N_pre_filter_steps = 45
 num_bins = 100
@@ -58,7 +58,7 @@ engine = HistoEngineEM(model, params, num_bins, [], ds[:N_pre_filter_steps],
                       hard_em_type)
 pre_filtered_pmfs = engine.batch_filter(ds[:N_pre_filter_steps], False)
 
-# %% Plot propagation matrices for different values of u
+# Plot propagation matrices for different values of u
 
 data_curr = ds[N_pre_filter_steps].copy()  # Copy to avoid modifying original data
 data_past = ds[N_pre_filter_steps - 1]
@@ -112,7 +112,7 @@ for i, propCPD in enumerate(propCPDs):
     plt.savefig(f'figures/{probCPDFNames[i]}.raw.png', dpi=300)
     plt.savefig(f'figures/{probCPDFNames[i]}.raw.emf')
 
-# %% Plot direction observation matrices for different values of d
+# Plot direction observation matrices for different values of d
 
 data_curr = ds[N_pre_filter_steps].copy()
 data_past = ds[N_pre_filter_steps - 1]
@@ -167,7 +167,7 @@ for i, obsDirCPD in enumerate(obsDirCPDs):
     plt.savefig(f'figures/{obsDirCPDFNames[i]}.raw.png', dpi=300)
     plt.savefig(f'figures/{obsDirCPDFNames[i]}.raw.emf')
 
-# %% Plot pose observation matrices for different values of z
+# Plot pose observation matrices for different values of z
 
 data_curr = ds[N_pre_filter_steps].copy()
 data_past = ds[N_pre_filter_steps - 1]
@@ -222,7 +222,7 @@ for i, obsPoseCPD in enumerate(obsPoseCPDs):
     plt.savefig(f'figures/{obsPoseCPDFNames[i]}.raw.png', dpi=300)
     plt.savefig(f'figures/{obsPoseCPDFNames[i]}.raw.emf')
 
-# %% Plot prior state matrix at N+1'th time step
+# Plot prior state matrix at N+1'th time step
 
 priorCPD = pre_filtered_pmfs[-1, :]
 priorCPDMat = np.tile(priorCPD, (num_bins, 1))
@@ -264,7 +264,7 @@ for i in range(2):
     plt.savefig(f'figures/{prior_fnames[i]}.png', dpi=300)
     plt.savefig(f'figures/{prior_fnames[i]}.emf')
 
-# %% Plot propagation and observation matrices for N+1'th time step
+# Plot propagation and observation matrices for N+1'th time step
 
 data_curr = ds[N_pre_filter_steps].copy()
 data_past = ds[N_pre_filter_steps - 1]
@@ -307,20 +307,20 @@ for i, filterCPD in enumerate(filterCPDs):
     plt.savefig(f'figures/{filterCPDFNames[i]}.png', dpi=300)
     plt.savefig(f'figures/{filterCPDFNames[i]}.emf')
 
-# %% Plot joint belief, and filtered state matrix at N+1'th time step
+# Plot joint belief, and filtered state matrix at N+1'th time step
 
 # TODO: Implement joint belief plotting
 
-# %% Plot smooth-prior state matrix at N'th time step
+# Plot smooth-prior state matrix at N'th time step
 
 # TODO: Implement smooth-prior plotting
 
-# %% Plot smoothed state matrix at N'th time step
+# Plot smoothed state matrix at N'th time step
 
 # TODO: Implement smoothed state matrix plotting
 
-# %% TODO: prediction illustrations
+# TODO: prediction illustrations
 
-# %% TODO: MAP inference limitation illustrations
+# TODO: MAP inference limitation illustrations
 
 plt.show()

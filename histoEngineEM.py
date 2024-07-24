@@ -38,7 +38,7 @@ class HistoEngineEM(HistoEngine):
 
             self.em['iter'] += 1
 
-            # E step: infer latent states for current model
+            # infer latent states for current model
             try:
                 if self.em['hard_em_type'] == 'filter':
                     filtered_pmfs = self.batchFilter(self.data_all, iter_verbose)
@@ -66,7 +66,7 @@ class HistoEngineEM(HistoEngine):
                 self.logJointProb(self.data_all, self.em['E_states_list'][-1])
             )
 
-            # M step: fit model parameters
+            # fit model parameters
             self.em['params_list'].append(
                 self.model.optimizeParams(self.data_all,
                                         self.em['E_states_list'][-1],

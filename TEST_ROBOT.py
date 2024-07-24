@@ -11,12 +11,12 @@ from genRobotPathData import genRobotPathData
 
 
 
-# %% Set up environment
+# Set up environment
 np.random.seed(1729)
 
-# %% Generate simulated observed data
+# Generate simulated observed data
 
-num_time_steps = 201
+num_time_steps = int(input("Enter number of time steps: ")) # 201
 init_pos = 0.3
 # prop_behavior = 'stationary'
 # prop_behavior = 'brownian'
@@ -41,12 +41,12 @@ dataset = genRobotPathData(num_time_steps, init_pos,
 # ds = dataset['data_all']
 ds = np.array(dataset['data_all']) 
 
-# %% Initialize engine
+# Initialize engine
 
 # Set to 0 to only run filtering+smoothing+MAP
 num_em_steps = 5
 
-num_bins = 300
+num_bins = int(input("Enter Number of Bins: ")) # 300
 hard_em_type = 'smooth'
 em_params_eps_gain = 1
 params = {
@@ -64,7 +64,7 @@ model_dup = RobotModel(params)
 engine = HistoEngineEM(model, params, num_bins, [], ds, hard_em_type)
 engine_dup = HistoEngineEM(model_dup, params, num_bins, [], ds, hard_em_type)
 
-# %% Run smoothing/filtering/MAP
+# Run smoothing/filtering/MAP
 
 inference_t = -1
 paramfit_t = -1
@@ -91,7 +91,7 @@ if num_em_steps <= 0:
                         filtering_probs, smoothing_probs)
     plt.show()
 
-# %% Run EM
+# Run EM
 em_t = -1
 if num_em_steps > 0:
     engine.reset()
@@ -99,7 +99,7 @@ if num_em_steps > 0:
     engine.runEM(num_em_steps, False, em_params_eps_gain, True)
     em_t = time.time() - tic
 
-# %% Report results
+# Report results
 if num_em_steps > 0:
     state_vec_matrix = np.tile(engine.cache['x_vec'], (ds.shape[0] + 1, 1))
 
@@ -128,7 +128,7 @@ if num_em_steps > 0:
     exp_smoothed_states_last = np.mean(smoothing_probs_last * state_vec_matrix, axis=1)
     ljp_last = engine_dup.logJointProb(ds, exp_smoothed_states_last)
     model_dup.plotHistogram(ds, cache, map_states_last,
-                           filtering_probs_last, smoothing_probs_last, 2, [])
+                           filtering_probs_last, smoothing_probs_last, 2, 0.05)
     plt.title(f'Final EM iter (Log Joint Prob w/ Expected Smoothed States: {ljp_last:.4e})')
     plt.show()
 
